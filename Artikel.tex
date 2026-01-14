@@ -17,6 +17,7 @@
 %% Preambel laden ===========================================================
 \input{preambel/settings-artikel}
 \input{preambel/preambel-artikel}
+\AtBeginBibliography{\RaggedRight}
 
 %% Metadaten des Artikels ==================================================
 \author{Yannick Diehl}
@@ -34,7 +35,7 @@
 % Abstract (einspaltiger Kasten)
 \begin{abstract}
 \noindent
-Software altert: Technologien werden abgekündigt, Anforderungen ändern sich, Wartung wird teuer. Statt pauschal \enquote{alles neu} zu bauen, nutzen Unternehmen und Teams bewährte Modernisierungsstrategien, die oft als \enquote{6~R} zusammengefasst werden. In dieser Arbeit wird untersucht, welche dieser Strategien für die Komponenten der Anwendung \texttt{frag.jetzt} jeweils am sinnvollsten ist: eine Frontend-PWA, ein Spring-Boot-Backend, eine PostgreSQL-Datenbank und angebundene AI-Services. Ziel ist eine begründete Zuordnung pro Komponente anhand von Kriterien wie Risiko, Aufwand, Betriebsstabilität, Kosten und zukünftiger Weiterentwicklung.
+Die Modernisierung bestehender Softwaresysteme erfordert Entscheidungen unter technischen, organisatorischen und betrieblichen Randbedingungen. Anhand der Webanwendung \texttt{frag.jetzt} untersucht diese Arbeit, welche der \enquote{6~R}-Strategien (u.\,a. Rehost, Replatform, Refactor/Re-architect, Rebuild, Replace) für die jeweiligen Systemkomponenten am geeignetsten ist: Frontend als Progressive Web App, Spring-Boot-Backend, PostgreSQL-Datenbank und angebundene AI-Services. Methodisch wird eine Fallstudie mit einem expliziten Bewertungsrahmen kombiniert, der Strategien je Komponente entlang definierter Kriterien (z.\,B. Wartbarkeit, Sicherheitsanforderungen, Integrationsaufwand, Betriebsrisiko, Kosten und Lock-in) vergleicht. Ergebnis ist eine nachvollziehbar begründete Strategiezuordnung pro Komponente einschließlich identifizierter Risiken und Implikationen für eine schrittweise Umsetzung.
 \end{abstract}
 
 % Hauptinhalt

@@ -5,36 +5,58 @@
 
 \section{Einleitung}
 
-Spätestens seit dem starken Anstieg regulatorischer Anforderungen, Sicherheitsvorfälle und der dynamischen Entwicklung datengetriebener Funktionen (insbesondere im Umfeld von AI-Services) steht in vielen Organisationen nicht mehr \emph{ob}, sondern \emph{wie} bestehende Software modernisiert werden soll. Gleichzeitig ist die Ausgangslage häufig durch knappe Budgets, begrenzte Personalressourcen und einen laufenden Betrieb geprägt, der nicht beliebig unterbrochen werden kann. Modernisierung muss daher als kontrollierter, risikobewusster Veränderungsprozess verstanden werden: Ziel ist nicht ein maximal modernes Zielbild um jeden Preis, sondern eine begründete Veränderung mit klarer Priorisierung.
+Softwareprojekte stehen heute nicht mehr nur vor der Herausforderung, funktional zu sein, sondern auch langfristig effizient, nachhaltig und anpassungsfähig zu bleiben.
+Als Lösung dafür wird die Migration von Client-Side-Software in die Cloud gesehen, welche wichtige Vorteile wie Skalierbarkeit und Flexibilität bietet, aber gleichzeitig
+völlig neue Herausforderungen und Probleme mit sich bringt. Diesen Migrationsprozess zu gestalten und zu steuern, ist sehr Komplex. Weswegen damit fundierte Entscheidungen 
+getroffen werden können, fundierte Fachkenntnisse und vorallem die Richtige Strategie zur Migration in die Cloud benötigt wird. Einher mit einer Migration geht meist eine Modernisierung der Software.
+Die Frage für Organisationen ist nicht mehr \emph{ob}, sondern \emph{wie} bestehende Software modernisiert werden soll um eine möglichst schnelle,
+kostengünstige aber auch effektive Cloud-Migration durchzuführen.
 
-Für diese Entscheidungsfindung haben sich in der Praxis Strategierahmen etabliert, die Modernisierung als Menge diskreter Optionen modellieren. Ein verbreitetes Modell sind die sogenannten \enquote{6~R}-Strategien, die unter anderem in Cloud-Migrations- und Portfolio-Assessment-Ansätzen beschrieben werden. Kernidee ist eine systematische Entscheidung \emph{pro Komponente}: Je nach technischem Zustand, fachlichem Nutzen, Risiko und Kopplungsgrad wird eine andere Vorgehensweise empfohlen, etwa \emph{Rehost} (Lift-and-Shift), \emph{Replatform} (geringe technische Anpassungen), \emph{Refactor} bzw. \emph{Re-architect} (tiefgreifende Anpassungen), \emph{Repurchase/Replace} (Wechsel zu einem anderen Produkt bzw. SaaS), \emph{Retire} (Außerbetriebnahme) oder \emph{Retain} (Beibehaltung)~\cite{aws2023sixRs}.
+Verbreitete Modelle zur Cloud Migration werden in den sogenannten \enquote{6R}-Strategien beschrieben, welche jeweiles eine etwas ander Herangehensweise beschreiben.
+Ziel dieser Arbeit ist eine begründete Entscheidung \emph{pro Komponente} zu liefern. Denn je nach technischem Zustand, Nutzen, Risiko und Kopplungsgrad soll abgewogen werden, 
+welche der Strategien für die einzelnen Komponenten des Praxisbeispiels frag.jetzt am besten geeigent ist. Diese zuvor als \enquote{6R}-Strategien bezeichneten Vorgehensweisen 
+beinhalten \emph{Rehost} (Lift-and-Shift), \emph{Replatform}, \emph{Refactor} bzw. \emph{Re-architect}, \emph{Repurchase/Replace}, \emph{Retire} oder \emph{Retain} ~\cite{aws2023sixRs}.
 
-Diese Bachelorarbeit untersucht diese Fragestellung anhand der Anwendung \texttt{frag.jetzt}. Das System lässt sich in klar unterscheidbare Komponenten zerlegen: ein Frontend als Progressive Web App (PWA), ein Spring-Boot-Backend als Anwendungslogik und API-Schicht, eine PostgreSQL-Datenbank als persistente Datenhaltung sowie angebundene AI-Services, die zusätzliche Anforderungen an Datenschutz, Kostenkontrolle und Betriebsstabilität mitbringen (u.\,a. durch die Abhängigkeit von externen Modellen und deren Update-Zyklen).
+Diese Bachelorarbeit untersucht anhand der Anwendung \texttt{frag.jetzt}, welche der \enquote{6R}-Strategien für die jeweiligen Komponenten am besten geeignet ist. 
+Die Software frag.jetzt lässt sich in klar unterscheidbare Komponenten zerlegen. Das Frontend wird als Progressive Web App (PWA) abgebildet, 
+während das Backend die Anwendungslogik und API-Schicht bildet und dazu Java Spring-Boot verwendet. 
+Zur Datenhaltung kommt eine PostgreSQL-Datenbank zu Einsatz. Ergänzt werden die Komponenten durch die angebundenen AI-Services welche KI-Funktionalitäten für die Nutzer bereitstellen.
 
 \subsection{Forschungsfrage und Zielsetzung}
-
+% bis hier überprüft
 Die Arbeit beantwortet die Forschungsfrage:
 \begin{quote}
 \emph{Welche der 6~R-Strategien ist für die verschiedenen Komponenten von \texttt{frag.jetzt} jeweils am besten geeignet?}
 \end{quote}
 
-Ziel ist eine nachvollziehbar begründete Zuordnung einer Strategie \emph{pro Komponente}. Die Begründung erfolgt anhand eines Kriterienkatalogs, der sowohl technische als auch organisatorische Aspekte berücksichtigt, insbesondere Wartbarkeit, Sicherheitsanforderungen, Integrationsaufwand, Performance, Betriebskosten und erwartete Weiterentwicklung. Die Ergebnisse sollen so formuliert sein, dass sie als Entscheidungsgrundlage für eine schrittweise Modernisierung nutzbar sind.
+Ziel ist eine nachvollziehbar begründete Zuordnung einer Strategie \emph{pro Komponente}. Die Begründung erfolgt anhand eines Kriterienkatalogs, der sowohl technische 
+als auch organisatorische Aspekte berücksichtigt, insbesondere Wartbarkeit, Sicherheitsanforderungen, Integrationsaufwand, Performance, Betriebskosten und erwartete Weiterentwicklung. 
+Die Ergebnisse sollen so formuliert sein, dass sie als Entscheidungsgrundlage für eine schrittweise Modernisierung nutzbar sind.
 
 \subsection{Aufbau der Arbeit}
 
-Die Arbeit gliedert sich in vier Teile: (1) theoretische Fundierung der Modernisierungsstrategien und relevanter Qualitätsattribute, (2) Beschreibung des Systemkontexts und der betrachteten Komponenten, (3) methodisches Vorgehen zur Bewertung und Auswahl der Strategien sowie (4) Ergebnisdarstellung als begründete Zuordnung je Komponente inklusive Umsetzungsfahrplan und Reflexion der Grenzen.
+Die Arbeit gliedert sich in vier Teile: (1) theoretische Fundierung der Modernisierungsstrategien und relevanter Qualitätsattribute, (2) Beschreibung des Systemkontexts und 
+der betrachteten Komponenten, (3) methodisches Vorgehen zur Bewertung und Auswahl der Strategien sowie (4) Ergebnisdarstellung als begründete Zuordnung je Komponente inklusive 
+Umsetzungsfahrplan und Reflexion der Grenzen.
 
 \section{Theoretische Fundierung}
 
 \subsection{Software-Modernisierung als architektonische Entscheidungsaufgabe}
 
-Software-Modernisierung umfasst Maßnahmen, die technische und strukturelle Eigenschaften eines Systems verbessern, um langfristige Wartbarkeit, Anpassbarkeit und Betriebsfähigkeit zu sichern. Aus architektonischer Sicht ist Modernisierung eine Abfolge von Entscheidungen unter Unsicherheit: Jede Maßnahme verändert Kopplungen, Schnittstellen und Qualitätsmerkmale und kann dadurch neue Risiken oder Abhängigkeiten erzeugen. Architektur wird in diesem Sinne als \emph{Trade-off} zwischen konkurrierenden Qualitätszielen verstanden, etwa zwischen schneller Lieferung und hoher Robustheit oder zwischen Kostenminimierung und Reduktion von Vendor-Lock-in~\cite{richards2020fundamentals,ford2021hardparts}.
+Software-Modernisierung umfasst Maßnahmen, die technische und strukturelle Eigenschaften eines Systems verbessern, um langfristige Wartbarkeit, Anpassbarkeit und 
+Betriebsfähigkeit zu sichern. Aus architektonischer Sicht ist Modernisierung eine Abfolge von Entscheidungen unter Unsicherheit: Jede Maßnahme verändert Kopplungen, 
+Schnittstellen und Qualitätsmerkmale und kann dadurch neue Risiken oder Abhängigkeiten erzeugen. Architektur wird in diesem Sinne als \emph{Trade-off} zwischen konkurrierenden 
+Qualitätszielen verstanden, etwa zwischen schneller Lieferung und hoher Robustheit oder zwischen Kostenminimierung und Reduktion von Vendor-Lock-in~\cite{richards2020fundamentals,ford2021hardparts}.
 
-Ein zentraler Grundsatz ist, dass nicht alle Komponenten denselben Modernisierungsgrad benötigen. Komponenten unterscheiden sich bezüglich Änderungsrate, Sicherheitskritikalität, Skalierungsbedarf und Technologierisiko. Eine PWA ist beispielsweise stark durch Browser-APIs, Endgerätevielfalt und UX-Anforderungen geprägt, während eine Datenbank primär durch Datenintegrität, Migrationsrisiken und Betriebsstabilität dominiert wird. Folglich ist eine komponentenspezifische Strategieauswahl plausibler als eine monolithische \enquote{One-size-fits-all}-Modernisierung.
+Ein zentraler Grundsatz ist, dass nicht alle Komponenten denselben Modernisierungsgrad benötigen. Komponenten unterscheiden sich bezüglich Änderungsrate, 
+Sicherheitskritikalität, Skalierungsbedarf und Technologierisiko. Eine PWA ist beispielsweise stark durch Browser-APIs, Endgerätevielfalt und UX-Anforderungen geprägt, während eine Datenbank 
+primär durch Datenintegrität, Migrationsrisiken und Betriebsstabilität dominiert wird. Folglich ist eine komponentenspezifische Strategieauswahl plausibler als
+ eine monolithische \enquote{One-size-fits-all}-Modernisierung.
 
 \subsection{Die 6~R-Strategien}
 
-Das 6~R-Modell dient der strukturierten Portfolio-Entscheidung. AWS beschreibt einen eng verwandten Katalog von Migrationsstrategien (häufig als \enquote{7~Rs} bezeichnet); in dieser Arbeit wird für die weitere Argumentation eine gebräuchliche 6~R-Variante verwendet, in der die zusätzliche Kategorie \enquote{Relocate/Verschieben} nicht separat betrachtet wird~\cite{aws2023sixRs}:
+Das 6~R-Modell dient der strukturierten Portfolio-Entscheidung. AWS beschreibt einen eng verwandten Katalog von Migrationsstrategien (häufig als \enquote{7~Rs} bezeichnet);
+ in dieser Arbeit wird für die weitere Argumentation eine gebräuchliche 6~R-Variante verwendet, in der die zusätzliche Kategorie \enquote{Relocate/Verschieben} nicht separat betrachtet wird~\cite{aws2023sixRs}:
 \begin{itemize}
   \item \textbf{Rehost:} Migration mit minimalen Änderungen (z.\,B. Infrastrukturwechsel), primär zur schnellen Entlastung oder Standardisierung.
   \item \textbf{Replatform:} Migration mit begrenzten technischen Anpassungen, typischerweise zur Nutzung eines managed Dienstes oder zur Reduktion operativer Last.
@@ -44,11 +66,13 @@ Das 6~R-Modell dient der strukturierten Portfolio-Entscheidung. AWS beschreibt e
   \item \textbf{Retain:} Beibehaltung (vorerst keine Migration), z.\,B. bei Abhängigkeiten oder fehlender Priorität.
 \end{itemize}
 
-In der Praxis werden einzelne Begriffe unterschiedlich abgegrenzt (insbesondere \emph{Refactor} vs. \emph{Re-architect}). In dieser Arbeit werden beide als Spektrum tiefgreifender, architektureller Veränderungen verstanden, die über rein kosmetische Code-Verbesserungen hinausgehen.
+In der Praxis werden einzelne Begriffe unterschiedlich abgegrenzt (insbesondere \emph{Refactor} vs. \emph{Re-architect}). In dieser Arbeit werden beide als Spektrum
+ tiefgreifender, architektureller Veränderungen verstanden, die über rein kosmetische Code-Verbesserungen hinausgehen.
 
 \subsection{Komponententypen und Qualitätsanforderungen}
 
-Für die Bewertung der Strategien werden Qualitätsanforderungen herangezogen, die in der Softwarearchitektur als entscheidungsleitend gelten~\cite{richards2020fundamentals,ford2021hardparts}. Für \texttt{frag.jetzt} sind insbesondere relevant:
+Für die Bewertung der Strategien werden Qualitätsanforderungen herangezogen, die in der Softwarearchitektur als entscheidungsleitend gelten~\cite{richards2020fundamentals,ford2021hardparts}. 
+Für \texttt{frag.jetzt} sind insbesondere relevant:
 \begin{itemize}
   \item \textbf{Wartbarkeit und Änderbarkeit:} Aufwand zur Implementierung neuer Anforderungen ohne regressionsbedingte Risiken.
   \item \textbf{Sicherheit und Datenschutz:} Schutz vor Missbrauch, Einhaltung organisatorischer und rechtlicher Vorgaben.
@@ -57,21 +81,29 @@ Für die Bewertung der Strategien werden Qualitätsanforderungen herangezogen, d
   \item \textbf{Portabilität und Lock-in-Risiko:} Abhängigkeit von spezifischen Plattformen oder Diensten.
 \end{itemize}
 
-Im Kontext von AI-Services treten zusätzliche Risiken auf, etwa durch Modell-Updates, unvorhersehbare Antwortqualität, Datenschutzanforderungen und die Notwendigkeit systematischer Risikosteuerung. Rahmenwerke wie der NIST AI RMF bieten hierfür Kategorien zur Risikoidentifikation und -behandlung, die sich als ergänzende Kriterien operationalisieren lassen~\cite{nist2023airmf}.
+Im Kontext von AI-Services treten zusätzliche Risiken auf, etwa durch Modell-Updates, unvorhersehbare Antwortqualität, Datenschutzanforderungen und die Notwendigkeit 
+systematischer Risikosteuerung. Rahmenwerke wie der NIST AI RMF bieten hierfür Kategorien zur Risikoidentifikation und -behandlung, die sich als ergänzende Kriterien operationalisieren lassen~\cite{nist2023airmf}.
 
 \subsection{Systemkontext: frag.jetzt als Fallstudie}
 
-\texttt{frag.jetzt} wird in dieser Arbeit als exemplarisches System verstanden, an dem sich die Strategieauswahl für typische Webanwendungs-Komponenten demonstrieren lässt. Die technische Aufteilung in Frontend (PWA), Backend (Spring Boot), Datenhaltung (PostgreSQL) und externe AI-Services ist in modernen Anwendungen häufig anzutreffen und ermöglicht eine getrennte Betrachtung. Für die Komponentenbeschreibung werden primär Architekturartefakte (z.\,B. Schnittstellen, Deployments, Datenflüsse) und betrieblich relevante Eigenschaften (z.\,B. Skalierungsprofile, Ausfallfolgen) herangezogen.
+\texttt{frag.jetzt} wird in dieser Arbeit als exemplarisches System verstanden, an dem sich die Strategieauswahl für typische Webanwendungs-Komponenten 
+demonstrieren lässt. Die technische Aufteilung in Frontend (PWA), Backend (Spring Boot), Datenhaltung (PostgreSQL) und externe AI-Services ist in modernen Anwendungen häufig 
+anzutreffen und ermöglicht eine getrennte Betrachtung. Für die Komponentenbeschreibung werden primär Architekturartefakte (z.\,B. Schnittstellen, Deployments, Datenflüsse) und 
+betrieblich relevante Eigenschaften (z.\,B. Skalierungsprofile, Ausfallfolgen) herangezogen.
 
 \section{Methodik}
 
 \subsection{Forschungsdesign}
 
-Methodisch wird eine qualitative Fallstudie mit einem formalisierten Bewertungsrahmen kombiniert. Die Fallstudie erlaubt es, kontextabhängige Faktoren (z.\,B. organisatorische Constraints, Betriebsrealität, technische Historie) zu berücksichtigen. Der Bewertungsrahmen sorgt dafür, dass die resultierende Strategieentscheidung nicht rein intuitiv erfolgt, sondern entlang expliziter Kriterien transparent begründet wird.
+Methodisch wird eine qualitative Fallstudie mit einem formalisierten Bewertungsrahmen kombiniert. Die Fallstudie erlaubt es, kontextabhängige 
+Faktoren (z.\,B. organisatorische Constraints, Betriebsrealität, technische Historie) zu berücksichtigen. Der Bewertungsrahmen sorgt dafür, dass die resultierende Strategieentscheidung 
+nicht rein intuitiv erfolgt, sondern entlang expliziter Kriterien transparent begründet wird.
 
 \subsection{Bewertungsrahmen: Kriterienkatalog und Entscheidungsmatrix}
 
-Für jede Komponente wird eine Entscheidungsmatrix erstellt, in der die 6~R-Strategien entlang eines Kriterienkatalogs bewertet werden. Kriterien werden in mess- oder zumindest begründbar beobachtbare Indikatoren überführt (z.\,B. \enquote{Deployment-Frequenz} als Proxy für Änderungsrate, \enquote{Anzahl externer Abhängigkeiten} als Proxy für Integrationskomplexität). Die Bewertung erfolgt in einer ordinalen Skala (z.\,B. 1--5), ergänzt durch qualitative Begründungen.
+Für jede Komponente wird eine Entscheidungsmatrix erstellt, in der die 6~R-Strategien entlang eines Kriterienkatalogs bewertet werden.
+ Kriterien werden in mess- oder zumindest begründbar beobachtbare Indikatoren überführt (z.\,B. \enquote{Deployment-Frequenz} als Proxy für Änderungsrate, \enquote{Anzahl externer Abhängigkeiten} als Proxy
+  für Integrationskomplexität). Die Bewertung erfolgt in einer ordinalen Skala (z.\,B. 1--5), ergänzt durch qualitative Begründungen.
 
 Ein Beispiel für die Struktur einer solchen Matrix zeigt Tabelle~\ref{tab:entscheidung}.
 
@@ -108,9 +140,13 @@ Zur Datenerhebung werden folgende Quellen vorgesehen:
 
 \subsection{Auswertung und Validität}
 
-Die Auswertung erfolgt komponentenweise: Für jede Komponente werden (1) Ist-Zustand und Qualitätsanforderungen beschrieben, (2) Strategien anhand der Matrix bewertet und (3) eine Empfehlung mit Begründung und Risiken formuliert. Zur Erhöhung der Validität wird eine \emph{Plausibilitätsprüfung} eingeplant: Die Empfehlungen werden gegen bekannte Architekturprinzipien sowie gegen typische Fallstricke moderner Architekturen gespiegelt (z.\,B. Überfragmentierung, operativer Overhead, unbeabsichtigte Lock-in-Effekte)~\cite{richards2020fundamentals,ford2021hardparts}.
+Die Auswertung erfolgt komponentenweise: Für jede Komponente werden (1) Ist-Zustand und Qualitätsanforderungen beschrieben, (2) Strategien anhand der Matrix bewertet und (3) 
+eine Empfehlung mit Begründung und Risiken formuliert. Zur Erhöhung der Validität wird eine \emph{Plausibilitätsprüfung} eingeplant: Die Empfehlungen werden gegen 
+bekannte Architekturprinzipien sowie gegen typische Fallstricke moderner Architekturen gespiegelt (z.\,B. Überfragmentierung, operativer Overhead, unbeabsichtigte 
+Lock-in-Effekte)~\cite{richards2020fundamentals,ford2021hardparts}.
 
-Grenzen der Methodik liegen vor allem in der Kontextabhängigkeit: Ergebnisse sind nicht ohne Weiteres auf andere Systeme übertragbar. Genau darin liegt jedoch zugleich der Beitrag einer Fallstudie, nämlich die nachvollziehbare Argumentation im konkreten Kontext.
+Grenzen der Methodik liegen vor allem in der Kontextabhängigkeit: Ergebnisse sind nicht ohne Weiteres auf andere Systeme übertragbar. Genau darin liegt jedoch zugleich 
+der Beitrag einer Fallstudie, nämlich die nachvollziehbare Argumentation im konkreten Kontext.
 
 \section{Geplante Gliederung der Arbeit}
 
@@ -195,9 +231,8 @@ Die folgende Gliederung beschreibt den vorgesehenen Aufbau der Bachelorarbeit un
 \end{description}
 \endgroup
 
-\section*{Ausgewählte Quellen für dieses Exposé}
+\section*{Quellen dieses Exposés}
 
-Die folgenden Quellen wurden in dieser Arbeit zentral verwendet:
 \begingroup
 \RaggedRight
 \begin{itemize}

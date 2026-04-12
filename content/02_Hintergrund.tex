@@ -12,11 +12,11 @@ Das Kapitel führt in Grundbegriffe agentischer Systeme ein und bildet die theor
 
 \subsection{Large Language Models: Grundlagen}
 
-Large Language Models (LLMs)\index{Large Language Models!Grundlagen} sind neuronale Netze, die auf großen Textkorpora\index{Textkorpora!Training} trainiert wurden und menschenähnliche Textgenerierung ermöglichen~\cite{OpenAI2024GPT4,touvron2023llama}. Basierend auf der Transformer-Architektur\index{Transformer!Architektur}~\cite{vaswani2017attention} nutzen sie Selbstaufmerksamkeits-Mechanismen\index{Self-Attention} (Self-Attention), um kontextuelle Zusammenhänge über lange Sequenzen hinweg zu erfassen.
+Large Language Models (LLMs)\index{Large Language Models!Grundlagen} sind neuronale Netze, die auf großen Textkorpora\index{Textkorpora!Training} trainiert wurden und hochwertige Textgenerierung ermöglichen~\cite{OpenAI2024GPT4,touvron2023llama}. Basierend auf der Transformer-Architektur\index{Transformer!Architektur}~\cite{vaswani2017attention} nutzen sie Selbstaufmerksamkeitsmechanismen, um kontextuelle Zusammenhänge über lange Sequenzen hinweg zu erfassen.
 
-Moderne LLMs wie GPT-4, Claude 3.5 oder Llama 3 verfügen über Milliarden von Parametern und können durch \emph{Few-Shot-Learning}\index{Few-Shot-Learning} und \emph{In-Context-Learning}\index{In-Context-Learning} Aufgaben lösen, ohne explizit darauf trainiert zu werden. Das bildet die Grundlage für agentische Anwendungen\index{Agentische Anwendungen}.
+Aktuelle Modellfamilien der GPT-, Claude- und Llama-4-Klasse zeigen, dass sich sowohl Kontextlängen als auch Werkzeugnutzung und multimodale Fähigkeiten erweitert haben~\cite{meta2025llama4}. Dadurch können LLMs Aufgaben durch \emph{Few-Shot-Learning}\index{Few-Shot-Learning} und \emph{In-Context-Learning}\index{In-Context-Learning} häufig lösen, ohne explizit auf die konkrete Zielaufgabe nachtrainiert worden zu sein. Diese Eigenschaften bilden die Grundlage für agentische Anwendungen\index{Agentische Anwendungen}.
 
-\subsection{Von LLMs zu Agenten: Der Paradigmenwechsel}
+\subsection{Von LLMs zu Agenten: Erweiterte Automatisierungslogik}
 
 Während klassische LLMs primär auf Textvervollständigung spezialisiert sind, zeichnen sich \emph{agentische Systeme} durch erweiterte Fähigkeiten aus~\cite{wang2023survey}. Zentral ist das \textbf{zielgerichtete Handeln}\index{Agent!Zielgerichtetheit}: Der Agent versteht übergeordnete Ziele und plant systematisch Schritte zur Zielerreichung\index{Zielerreichung}. Die \textbf{Werkzeugnutzung}\index{Externe Tools} ermöglicht die Integration externer Tools wie APIs, Datenbanken und Code-Ausführung\index{Code-Ausführung}, wodurch die Fähigkeiten über reine Textgenerierung hinausgehen. Ein persistentes \textbf{Gedächtnis}\index{Kontextpersistierung} speichert Kontextinformationen über mehrere Interaktionen hinweg und ermöglicht kontextbewusstes Arbeiten. Durch \textbf{Reflexion}\index{Selbstbewertung} erfolgt eine selbstkritische Bewertung eigener Outputs mit iterativer Verbesserung. Schließlich unterstützt \textbf{mehrschrittige Planung}\index{Task-Dekomposition} die Dekomposition komplexer Aufgaben in ausführbare Teilschritte.
 
@@ -34,11 +34,11 @@ Kernbausteine agentischer Systeme sind \cite{weng2023prompt,yao2023react}:
   \item[Gedächtnis (Memory):] Speichert episodische (konkrete Ereignisse) und semantische (abstraktes Wissen) Informationen. Kann durch Vektor-Datenbanken oder strukturierte Speicher realisiert werden.
 \end{description}
 
-Orchestrierung koordiniert diese Komponenten durch Planung (z.\,B. ReAct-Pattern), Tool-Auswahl, Fehlerbehandlung und Reflexion~\cite{yao2023react}. Typische Artefakte in SE-Workflows sind strukturierte Schnittstellen über \textbf{JSON} und \textbf{YAML}, Datenpersistenz mittels \textbf{SQL}-Datenbanken sowie sichere Remote-Operationen über \textbf{SSH}. Darüber hinaus basieren viele Komponenten auf \textbf{ML}-Methoden und \textbf{NLP} für Code- und Textverstehen; Wissensrepräsentation erfolgt in \textbf{KB} (Wissensdatenbanken) und \textbf{KG} (Wissensgraphen). API-Interaktionen erfolgen üblicherweise über \textbf{HTTP} und \textbf{REST}, teils mit Fallbacks auf \textbf{XML}.
+Orchestrierung koordiniert diese Komponenten durch Planung, Werkzeugauswahl, Fehlerbehandlung und Reflexion~\cite{yao2023react}. Typische Artefakte in SE-Workflows sind strukturierte Schnittstellen über \textbf{JSON} und \textbf{YAML}, Datenpersistenz mittels \textbf{SQL}-Datenbanken sowie sichere Remote-Operationen über \textbf{SSH}. Darüber hinaus beruhen viele Komponenten auf Methoden des maschinellen Lernens und der Sprachverarbeitung für Code- und Textverstehen; Wissensrepräsentation erfolgt etwa in Wissensdatenbanken und Wissensgraphen. API-Interaktionen erfolgen üblicherweise über \textbf{HTTP} und \textbf{REST}.
 
 \subsection{Chain-of-Thought und Reasoning-Patterns}
 
-\emph{Chain-of-Thought (CoT)} Prompting~\cite{wei2022chain} ermöglicht es LLMs, Zwischenschritte explizit zu formulieren. Das verbessert die Reasoning-Qualität erheblich:
+\emph{Chain-of-Thought (CoT)} Prompting~\cite{wei2022chain} ermöglicht es LLMs, Zwischenschritte explizit zu formulieren. Dies kann die Qualität der Problembearbeitung verbessern:
 
 \begin{quote}
 \textit{\enquote{Let's think step by step}} — Typischer CoT-Prompt, der schrittweises Denken anregt
@@ -47,13 +47,13 @@ Orchestrierung koordiniert diese Komponenten durch Planung (z.\,B. ReAct-Pattern
 Erweiterte Muster umfassen:
 \begin{itemize}
   \item \textbf{ReAct} (Reasoning + Acting): Kombiniert Gedankenketten mit Tool-Aufrufen~\cite{yao2023react}
-  \item \textbf{Tree-of-Thought}: Exploriert mehrere Reasoning-Pfade parallel
-  \item \textbf{Reflexion}: Self-critique und iterative Verbesserung~\cite{shinn2023reflexion}
+  \item \textbf{Tree-of-Thought}: exploriert mehrere Begründungspfade parallel
+  \item \textbf{Reflexion}: Selbstkritik und iterative Verbesserung~\cite{shinn2023reflexion}
 \end{itemize}
 
 \subsection{Tool-Nutzung in LLMs}
 
-Die Fähigkeit von LLMs, externe Werkzeuge zu nutzen, ist zentral für praktische Anwendungen. \emph{Toolformer}~\cite{schick2023toolformer} zeigte, dass LLMs lernen können, wann und wie Tools aufzurufen sind. ToolLLM~\cite{qin2023tool} erweiterte dies auf über 16.000 reale APIs.
+Die Fähigkeit von LLMs, externe Werkzeuge zu nutzen, ist für praktische Anwendungen zentral. \emph{Toolformer}~\cite{schick2023toolformer} zeigte, dass LLMs lernen können, wann und wie Tools aufzurufen sind. ToolLLM~\cite{qin2023tool} erweiterte dies auf über 16.000 reale APIs.
 
 Typischer Tool-Calling-Flow:
 \begin{enumerate}
@@ -69,9 +69,9 @@ Typischer Tool-Calling-Flow:
 Praxisnahe Frameworks bieten Abstraktionen für agentische Systeme~\cite{wu2023autogen}:\footnote{\emph{ReAct} steht für \enquote{Reasoning and Acting} und ist eines der einflussreichsten Muster für agentische Systeme in der neueren Literatur.}
 
 \begin{itemize}
-  \item \textbf{LangChain}~\cite{chase2023langchain}: Modulare Komponenten für Chains, Agents, Memory
-  \item \textbf{AutoGPT/BabyAGI}: Autonome Task-Decomposition und -Execution
-  \item \textbf{MetaGPT}~\cite{hong2023metagpt}: Rollenbasierte Multi-Agent-Kollaboration
+  \item \textbf{LangChain}~\cite{chase2023langchain}: modulare Komponenten für Ketten, Agenten und Gedächtnis
+  \item \textbf{AutoGPT/BabyAGI}: frühe Ansätze autonomer Aufgabenzerlegung und -ausführung
+  \item \textbf{MetaGPT}~\cite{hong2023metagpt}: rollenbasierte Multi-Agent-Kollaboration
   \item \textbf{Generative Agents}~\cite{park2023generative}: Simulation menschlichen Verhaltens
 \end{itemize}
 
@@ -81,8 +81,7 @@ Es existiert umfangreiche Literatur zu agentischen Systemen im Allgemeinen und i
 
 \subsection{Reasoning-and-Acting-Patterns}
 
-\textbf{ReAct}~\cite{yao2023react} etablierte das grundlegende Pattern, bei dem LLMs explizit zwischen Reasoning-Schritten (Denken) und Acting-Schritten (Tool-Aufrufe) alternieren. Das Paper demonstrierte signifikante Verbesserungen bei question-answering und decision-making Tasks.
-\textbf{ReAct}~\cite{yao2023react} etablierte das grundlegende Pattern, bei dem LLMs explizit zwischen Reasoning-Schritten (Denken) und Acting-Schritten (Tool-Aufrufe) alternieren. Das Paper demonstrierte signifikante Verbesserungen bei Question-Answering und Decision-Making-Tasks.
+\textbf{ReAct}~\cite{yao2023react} etablierte das grundlegende Muster, bei dem LLMs explizit zwischen Denk- und Handlungsschritten alternieren. Die Arbeit zeigte, dass diese Struktur sowohl Transparenz als auch Problemlösungsfähigkeit in mehrschrittigen Aufgaben verbessern kann.
 
 \textquote[\cite{yao2023react}]{Die Kombination von reasoning und acting führt zu robusteren und transparenteren Systemen, die besser nachvollziehbare Entscheidungen treffen.}
 
@@ -93,24 +92,26 @@ Die Vorteile umfassen:
   \item Möglichkeit zur Intervention und Korrektur
 \end{itemize}
 
-Grenzen sind längere Latenzen durch zusätzliche LLM-Aufrufe und potentielle Halluzinationen in Reasoning-Schritten.
+Grenzen bestehen insbesondere in zusätzlichen Latenzen durch weitere Modellaufrufe sowie in potenziellen Halluzinationen innerhalb der Denkspuren.
 
-\textbf{Reflexion}~\cite{shinn2023reflexion} erweitert ReAct um Self-Critique: Der Agent bewertet seine eigenen Outputs und lernt aus Fehlern durch verbale Bestärkung. Das verbessert die Erfolgsrate bei komplexen Tasks um bis zu \pct{20}.
+\textbf{Reflexion}~\cite{shinn2023reflexion} erweitert ReAct um Selbstkritik: Der Agent bewertet seine eigenen Zwischenergebnisse und nutzt Rückmeldungen zur iterativen Verbesserung. Dies erhöht typischerweise die Robustheit, geht jedoch mit zusätzlichem Rechenaufwand einher.
 
 \subsection{Software Engineering Agents}
 
 Speziell für Software Engineering wurden mehrere agentische Systeme entwickelt:
 
-\textbf{SWE-bench}~\cite{jimenez2023swe} ist ein Benchmark mit über 2.000 realen GitHub-Issues aus Python-Projekten. Es misst, ob Agenten eigenständig Pull Requests erstellen können, die die Issues lösen. Baseline-Systeme erreichen nur \pct{3}--\pct{5} Erfolgsrate, was die Schwierigkeit unterstreicht.
+\textbf{SWE-bench}~\cite{jimenez2023swe} ist ein Benchmark mit über 2.000 realen GitHub-Issues aus Python-Projekten. Er misst, ob Agenten eigenständig Änderungen erzeugen können, die die zugrundeliegenden Probleme beheben. Frühe Baselines erreichten nur \pct{3}--\pct{5} Erfolgsrate und machten damit die Schwierigkeit dieser Aufgaben sichtbar.
 
-\textbf{SWE-agent}~\cite{yang2024sweagent} demonstrierte, dass optimierte Agent-Computer-Interfaces (ACIs) die Erfolgsrate auf \pct{12.5} steigern können. Zentral sind:
+\textbf{SWE-agent}~\cite{yang2024sweagent} demonstrierte, dass optimierte Agent-Computer-Interfaces (ACIs) die Erfolgsrate steigern können. Wesentliche Elemente sind:
 \begin{itemize}
   \item Spezialisierte Tools für Navigation, Suche und Editieren
   \item Kontextoptimierte Feedback-Formate
   \item Iterative Verfeinerungsschleifen
 \end{itemize}
 
-\textbf{Agentless}~\cite{zhang2024agentless} verfolgte einen minimalistischen Ansatz ohne persistentes Gedächtnis oder komplexe Planung und erreichte dennoch \pct{27} Erfolgsrate durch fokussierte Lokalisierung und Patching-Strategien. Das zeigt, dass nicht immer maximale Komplexität optimal ist.
+\textbf{Agentless}~\cite{zhang2024agentless} verfolgte einen vergleichsweise minimalistischen Ansatz ohne persistentes Gedächtnis oder komplexe Planung und zeigte, dass fokussierte Lokalisierungs- und Patching-Strategien in vielen Fällen konkurrenzfähig sein können. Dies spricht dafür, dass höhere Systemkomplexität nicht automatisch zu besseren Ergebnissen führt.
+
+Für den Forschungsstand 2026 ist allerdings eine methodische Einordnung erforderlich: Der lange populäre Teilbenchmark \enquote{SWE-bench Verified} gilt inzwischen nur noch eingeschränkt als verlässlicher Maßstab, weil Testdesign und mögliche Trainingskontamination die Aussagekraft verzerren können~\cite{openai2026swebenchverified}. Entsprechend verlagert sich die Diskussion auf robustere Setups wie \enquote{SWE-bench Pro} und auf stärker end-to-end gedachte Evaluierungen agentischer Systeme~\cite{swebench2026leaderboard}.
 
 \subsection{Multi-Agent-Systeme}
 
@@ -124,7 +125,7 @@ Mehrere Ansätze nutzen rollenbasierte Kollaboration zwischen spezialisierten Ag
 
 \subsection{Graph-/Workflow-basierte Orchestrierung}
 
-Graphen erlauben robuste Kontrollflüsse (Retry, Branching, Parallelisierung), klare Zustandsübergänge und bessere Testbarkeit~\cite{wu2023autogen}. LangGraph erweitert LangChain um zustandsbasierte Graphen mit deterministischen Übergängen.
+Graphen erlauben robuste Kontrollflüsse (Wiederholungen, Verzweigungen, Parallelisierung), explizite Zustandsübergänge und eine verbesserte Testbarkeit~\cite{wu2023autogen}. Neuere Frameworks wie LangGraph erweitern diesen Gedanken um zustandsbasierte Graphen mit deterministischen Übergängen.
 
 Vorteile:
 \begin{itemize}
@@ -193,7 +194,7 @@ Basierend auf der Analyse ergeben sich folgende offene Forschungsfragen und Lüc
 \subsection{Evaluations-Herausforderungen}
 
 \begin{itemize}
-  \item \textbf{Realistische Metriken:} SWE-bench misst nur Issue-Resolution, nicht Code-Qualität, Wartbarkeit oder Security
+  \item \textbf{Realistische Metriken:} Benchmarks wie SWE-bench messen nicht automatisch Code-Qualität, Wartbarkeit oder Sicherheit
   \item \textbf{Kosten-Nutzen-Analysen:} Token-Kosten vs. Entwicklerzeit-Ersparnis sind schwer zu quantifizieren
   \item \textbf{Sicherheit und Robustheit:} Wie messen wir Resistenz gegen Prompt-Injection oder schädliche Tools?
 \end{itemize}
@@ -201,7 +202,7 @@ Basierend auf der Analyse ergeben sich folgende offene Forschungsfragen und Lüc
 \subsection{Skalierungs- und Kostenfragen}
 
 \begin{itemize}
-  \item \textbf{Langer Kontext:} Bei großen Codebases (\textgreater 100\,k LOC) stoßen selbst 1\,M-Token-Kontextfenster an Grenzen
+  \item \textbf{Langer Kontext:} Bei großen Codebasen stoßen auch sehr große Kontextfenster im Millionenbereich an praktische Grenzen~\cite{meta2025llama4}
   \item \textbf{Viele Tool-Aufrufe:} Jeder Tool-Call erhöht Latenz und Kosten
   \item \textbf{Parallelisierung:} Können unabhängige Teilaufgaben parallel bearbeitet werden?
 \end{itemize}
@@ -219,4 +220,4 @@ Die Arbeit adressiert die identifizierten Lücken durch:
 
 Die folgenden Kapitel beschreiben Konzept (Kapitel~\ref{ch:konzept}), Implementierung (Kapitel~\ref{ch:realisierung}) und Evaluation im Detail.
 
-Zusätzlich zu den theoretischen Grundlagen ist es wichtig, die praktische Relevanz herauszustellen: Viele der hier diskutierten Patterns lassen sich unmittelbar in bestehende CI/CD-Pipelines integrieren und bieten dort schnelle Produktivitätsgewinne. Die anschließende Arbeit prüft deshalb nicht nur theoretische Eigenschaften, sondern evaluiert konkrete Integrationspfade in typische Entwickler-Workflows und berichtet über pragmatische Umsetzungsdetails, die den Transfer in produktive Umgebungen erleichtern. Die Kombination aus Theorie und Praxis bildet das Rückgrat der vorliegenden Untersuchung.
+Zusätzlich zu den theoretischen Grundlagen ist die praktische Relevanz zu berücksichtigen: Viele der hier diskutierten Muster lassen sich in bestehende CI/CD-Pipelines integrieren. Die anschließende Arbeit untersucht deshalb nicht nur theoretische Eigenschaften, sondern evaluiert konkrete Integrationspfade in typische Entwicklungsabläufe und berichtet über Umsetzungsdetails, die den Transfer in produktive Umgebungen erleichtern. Die Verknüpfung von Theorie und Praxis bildet damit den methodischen Rahmen der vorliegenden Untersuchung.

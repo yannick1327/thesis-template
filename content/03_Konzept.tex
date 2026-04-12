@@ -8,7 +8,7 @@
 
 \section{Übersicht des Lösungsansatzes}
 
-Aus Kapitel~\ref{ch:hintergrund} abgeleitet entwerfen wir eine referenzierbare Agentenarchitektur für Software Engineering\index{Agentenarchitektur!Entwurf}. Sie kombiniert Planung (ReAct-basierte Policy)\index{Policy-Engine}, Werkzeugnutzung (Linter, Tests, VCS, Dateioperationen)\index{Tool-Integration}, episodisches Gedächtnis und mehrschichtige Sicherheitsmechanismen (Eingabefilter, Sandboxing, Quoten).\footnote{\emph{Referenzierbar} bedeutet hier, dass die Architektur dokumentiert und in anderen Projekten anwendbar ist.}
+Aus Kapitel~\ref{ch:hintergrund} abgeleitet entwerfen wir eine referenzierbare Agentenarchitektur für Software Engineering\index{Agentenarchitektur!Entwurf}. Sie kombiniert Planung (ReAct-basierte Policy)\index{Policy-Engine}, Werkzeugnutzung (Linter, Tests, VCS, Dateioperationen)\index{Tool-Integration}, episodisches Gedächtnis und mehrschichtige Sicherheitsmechanismen (Eingabefilter, Sandboxing, Quoten).\footnote{\emph{Referenzierbar} bedeutet hier, dass die Architektur dokumentiert und in anderen Projekten nachvollziehbar adaptiert werden kann.}
 
 Der Kern der Architektur folgt dem \emph{Sense-Plan-Act-Reflect}-Zyklus\index{Sense-Plan-Act-Reflect}: Zunächst wird in der \textbf{Sense}-Phase der aktuelle Zustand erfasst, einschließlich Codebase, Fehlermeldungen und Test-Outputs. Darauf aufbauend erfolgt die \textbf{Plan}-Phase mit der Dekomposition des Ziels in ausführbare Teilschritte. In der \textbf{Act}-Phase werden Tool-Aufrufe und Code-Operationen ausgeführt. Abschließend bewertet die \textbf{Reflect}-Phase selbstkritisch die Ergebnisse und passt die Strategie an. Die Schleife wird iterativ wiederholt, bis das Ziel erreicht ist oder eine Abbruchbedingung eintritt (maximale Schritte, Timeout oder Fehlerrate).
 
@@ -40,7 +40,7 @@ Abbildung \ref{fig:agent-architektur} zeigt die Kernkomponenten der Architektur:
 
 \begin{sloppypar}
 \begin{description}
-  \item[Agent-Controller:] Zentrale Steuerungseinheit. Implementiert die ReAct-Loop (Reasoning, Action, Observation). Nutzt LLM-API für Planung und Reflexion.\index{ReAct}\index{LLM}
+  \item[Agent-Controller:] Zentrale Steuerungseinheit. Implementiert die ReAct-Schleife (Reasoning, Action, Observation). Nutzt die LLM-API für Planung und Reflexion.\index{ReAct}\index{LLM}
   
   \item[Tool-Registry:] Verwaltung verfügbarer Tools mit Metadaten (Name, Beschreibung, Schema, Berechtigungen)\index{Tool-Metadaten}. Ermöglicht Werkzeugerkennung\index{Tool-Discovery} und dynamisches Routing.
   
@@ -82,7 +82,7 @@ Abbildung \ref{fig:agent-architektur} zeigt die Kernkomponenten der Architektur:
 \draw[->] (memory) -| (controller);
 
 \end{tikzpicture}}
-\caption{Agentenarchitektur für Software Engineering mit agentic AI (TikZ-Diagramm)}
+\caption{Agentenarchitektur für Software Engineering mit agentischer KI (TikZ-Diagramm)}
 \label{fig:agent-architektur}
 \end{figure}
 
@@ -91,7 +91,7 @@ Abbildung \ref{fig:agent-architektur} zeigt die Kernkomponenten der Architektur:
 Der Agent Controller implementiert folgende Schleife:
 
 \begin{enumerate}
-  \item \textbf{Thought (Reasoning):} LLM generiert Reasoning-Schritt: \enquote{Was weiß ich? Was fehlt? Welcher nächste Schritt ist sinnvoll?}
+  \item \textbf{Thought (Reasoning):} Das LLM generiert einen Reasoning-Schritt: \enquote{Was weiß ich? Was fehlt? Welcher nächste Schritt ist sinnvoll?}
   
   \item \textbf{Action:} Auswahl und Parametrisierung eines Tools. Beispiel:
   
@@ -148,7 +148,7 @@ Die Entwicklung und Evaluation der Architektur folgt einem systematischen Vorgeh
 Das Vorgehen orientiert sich an Design Science Research \cite{sommerville2015software}:
 
 \begin{enumerate}
-  \item \textbf{Anforderungsanalyse:} Ableitung konkreter Requirements aus verwandten Arbeiten und Benchmarks (SWE-bench, HumanEval)
+  \item \textbf{Anforderungsanalyse:} Ableitung konkreter Anforderungen aus verwandten Arbeiten und Benchmarks
   
   \item \textbf{Architekturdesign:} Entwicklung der Referenzarchitektur (Abbildung~\ref{fig:agent-architektur}) mit Fokus auf Modularität
   
@@ -156,7 +156,7 @@ Das Vorgehen orientiert sich an Design Science Research \cite{sommerville2015sof
   
   \item \textbf{Evaluation:} Benchmark-Tests und Metriken-Erhebung (siehe Kapitel~\ref{ch:realisierung})
   
-  \item \textbf{Refinement:} Verbesserung basierend auf Evaluationsergebnissen
+  \item \textbf{Refinement:} Verbesserung auf Basis der Evaluationsergebnisse
 \end{enumerate}
 
 Abbildung~\ref{fig:agent-workflow} illustriert den ReAct-Zyklus einer agentischen Sitzung. Der Agent empfängt ein Ziel, sammelt Kontext, plant Schritte, führt Tools aus, verarbeitet Feedback und reflektiert über Zwischenergebnisse. Die Schleife wiederholt sich bis das Ziel erreicht oder abgebrochen wird.
@@ -165,7 +165,7 @@ Abbildung~\ref{fig:agent-workflow} illustriert den ReAct-Zyklus einer agentische
 \centering
 % Ganzseitige Abbildung
 \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{images/agent-workflow.png}
-\caption{ReAct Agent Workflow: Zyklisches Reasoning und Acting Paradigma mit Fehlertoleranz}
+\caption{ReAct-Workflow: Zyklisches Paradigma aus Denken und Handeln mit Fehlertoleranz}
 \label{fig:agent-workflow}
 \end{figure}
 
@@ -175,7 +175,7 @@ Die Evaluation erfolgt anhand mehrerer Dimensionen:
 
 \begin{sloppypar}
 \begin{description}
-  \item[Funktionale Korrektheit:] Erfolgsrate bei definierten SE-Tasks (Refactoring, Test-Fixing, Linting)
+  \item[Funktionale Korrektheit:] Erfolgsrate bei definierten SE-Szenarien (Refactoring, Testbehebung, Linting)
   
   \item[Effizienz:] Token-Verbrauch, Laufzeit, Anzahl Tool-Calls
   
@@ -237,11 +237,11 @@ Beispielablauf (kompakt):
   \item \textbf{Reflection:} Agent analysiert Fehlermeldungen, generiert einen präzisen Patch-Verfeinerungsvorschlag und wiederholt ggf. die Schleife.
 \end{enumerate}
 
-Wichtige Praxispunkte: Diffs werden vor dem Commit automatisch formatiert und durch Linter geprüft; kritische Änderungen durchlaufen ein Human-in-the-Loop-Gate. Logs und Traces werden gespeichert, so dass das Gedächtnis zukünftige Entscheidungen informieren kann.
+Wichtige Praxispunkte: Diffs werden vor dem Commit automatisch formatiert und durch Linter geprüft; kritische Änderungen durchlaufen eine explizite menschliche Freigabe. Logs und Traces werden gespeichert, so dass das Gedächtnis spätere Entscheidungen informieren kann.
 
-\section{Sicherheits- und Safety-Mechanismen}
+\section{Sicherheitsmechanismen}
 
-Da Agents Code ausführen und Dateien modifizieren, sind robuste Sicherheitsmechanismen essentiell.
+Da Agenten Code ausführen und Dateien modifizieren, sind robuste Sicherheitsmechanismen essenziell.
 
 \subsection{Input-Validation}
 
@@ -273,9 +273,9 @@ Alle kritischen Operationen werden geloggt:
   \item LLM-API-Aufrufe mit Token-Anzahl
 \end{itemize}
 
-\subsection{Human-in-the-Loop}
+\subsection{Menschliche Freigabe}
 
-Für kritische Operationen (Deployment, Datenbank-Modifikationen) wird menschliche Bestätigung eingefordert (siehe Listing~\ref{lst:human-approval}):
+Für kritische Operationen (Deployment, Datenbank-Modifikationen) wird eine menschliche Bestätigung eingefordert (siehe Listing~\ref{lst:human-approval}):
 
 \begin{lstlisting}[style=Python, caption={Human-Approval-Mechanismus (Pseudocode)}, label={lst:human-approval}]
 class HumanApprovalRequired(Exception):
@@ -297,7 +297,7 @@ Der Ansatz unterscheidet sich von den in Kapitel~\ref{ch:hintergrund} beschriebe
 
 \begin{sloppypar}
 \begin{itemize}
-  \item \textbf{Explizite Sicherheitsmechanismen:} Während viele Forschungsprototypen Safety vernachlässigen, steht es hier im Zentrum
+  \item \textbf{Explizite Sicherheitsmechanismen:} Während viele Forschungsprototypen Sicherheitsaspekte vernachlässigen, stehen sie hier im Zentrum
   
   \item \textbf{Referenzarchitektur:} Dokumentierte, wiederverwendbare Architektur statt monolithischem System
   

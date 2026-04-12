@@ -18,8 +18,8 @@ Folgende Technologien wurden für die Implementierung eingesetzt:
 \begin{sloppypar}
 \begin{description}
   \item[Programmiersprache:] Python 3.11+\index{Python} (Typ-Hinweise\index{Type Hints}, Async/Await-Un\-ter\-stüt\-zung\index{Async/Await})
-  \item[LLM-Integration:] OpenAI API (GPT-4)\index{GPT-4}, Anthropic API (Claude 3.5 Sonnet)\index{Claude}, mit Fallback-Mechanismus\index{Fallback-Mechanismus}
-  \item[Orchestrierung:] LangChain 0.1.x für Basis-Komponenten\index{LangChain}, benutzerdefinierte Erweiterungen für SE-spezifische Tools; strukturierte Tool-Calls über \textbf{JSON}-Schemas und Konfigurationen per \textbf{YAML}.
+  \item[LLM-Integration:] API-Zugriffe auf Frontier-Modelle der GPT- und Claude-Klasse\index{GPT-4}\index{Claude}, ergänzt um einen Fallback-Mechanismus\index{Fallback-Mechanismus}
+  \item[Orchestrierung:] modulare Agenten-Orchestrierung auf Basis etablierter Python-Bausteine\index{LangChain}; strukturierte Tool-Calls über \textbf{JSON}-Schemas und Konfigurationen per \textbf{YAML}
   \item[Gedächtnis:] Chroma\index{Chroma Vector-DB} Vektordatenbank für semantisches Retrieval, SQLite für episodische Logs\index{Event-Logging}
   \item[Werkzeuglaufzeitumgebung:] Docker 24.0+\index{Docker!Sandboxing} für Sandboxing, pytest für Tests, ruff/black für Linting\index{Code Linting}
   \item[Monitoring:] Prometheus für Metriken\index{Prometheus}, strukturierte Logs (JSON) mit Trace-IDs\index{Distributed Tracing}
@@ -49,7 +49,7 @@ agent_se/
 |   +-- sandbox.py         # Docker-based Execution Env
 +-- evaluation/
     +-- benchmarks.py      # Test Scenarios
-    +-- metrics.py         # Success Rate, Costs, Latency
+    +-- metrics.py         # Erfolgsraten, Kosten, Latenz
 \end{lstlisting}
 
 \subsection{Kernimplementierung: Agent-Controller}\index{Agent Controller!Implementierung}
@@ -166,10 +166,10 @@ Die Validierung erfolgt anhand von realistischen Testszenarien, die typische Sof
 
 \begin{sloppypar}
 \begin{description}
-  \item[Hardware:] MacBook Pro M2, 16\,GB RAM, 512\,GB SSD
-  \item[Betriebssystem:] macOS 14.x, Docker Desktop 4.25
-  \item[LLM-Modelle:] GPT-4-Turbo (0125), Claude 3.5 Sonnet, mit Temperatur 0.2 für Reproduzierbarkeit
-  \item[Testdaten:] 25 repräsentative Python-Projekte (5\,k--50\,k LOC), synthetische Bugs, real-world Issues
+  \item[Hardware:] Apple-Silicon-Notebook der Mittelklasse, 16\,GB RAM, SSD-Speicher
+  \item[Betriebssystem:] aktuelle macOS-Umgebung mit Docker-Laufzeit
+  \item[LLM-Modelle:] Frontier-Modelle der GPT- und Claude-Klasse, jeweils mit niedriger Temperatur (0.2) für Reproduzierbarkeit
+  \item[Testdaten:] 25 repräsentative Python-Projekte (5\,k--50\,k LOC), synthetische Bugs, reale Issue-Beschreibungen
 \end{description}
 \end{sloppypar}
 
@@ -178,9 +178,9 @@ Die Validierung erfolgt anhand von realistischen Testszenarien, die typische Sof
 Drei Haupt-Szenarien wurden evaluiert (vgl. Kapitel~\ref{ch:konzept}):
 
 \begin{enumerate}
-  \item \textbf{Automated Refactoring} (10 Tasks): Extract-Function, Rename-Variable, Simplify-Conditional
-  \item \textbf{Test Failure Diagnosis} (8 Tasks): Debug failing tests, fix assertions, update mocks
-  \item \textbf{Lint Error Resolution} (7 Tasks): Fix style issues, type errors, unused imports
+  \item \textbf{Automatisiertes Refactoring} (10 Szenarien): Extract-Function, Rename-Variable, Simplify-Conditional
+  \item \textbf{Diagnose fehlgeschlagener Tests} (8 Szenarien): Fehler in Tests analysieren, Assertions korrigieren, Mocks aktualisieren
+  \item \textbf{Behebung von Lint-Fehlern} (7 Szenarien): Stilprobleme, Typfehler und ungenutzte Importe beheben
 \end{enumerate}
 
 Jedes Szenario wurde 5-mal mit unterschiedlichen Seeds wiederholt, um Varianz zu messen.
@@ -219,7 +219,7 @@ Beispiel-Trace (gekürzt):
 [Agent] open_pr -> PR #42 (Draft)
 \end{lstlisting}
 
-Das Beispiel zeigt, wie Tool-Adapter, Memory und Safety-Layer (Sandbox, Human-Approval) zusammenwirken, um fehlerhafte Änderungen sicher zu erkennen und zu beheben. Solche Schritt-für-Schritt-Beispiele helfen bei der Operationalisierung der Architektur in realen Projekten.
+Das Beispiel zeigt, wie Tool-Adapter, Gedächtnis und Sicherheitsschicht (Sandbox, menschliche Freigabe) zusammenwirken, um fehlerhafte Änderungen sicher zu erkennen und zu beheben. Solche Schritt-für-Schritt-Beispiele helfen bei der Operationalisierung der Architektur in realen Projekten.
 
 \section{Ergebnisse}
 
@@ -227,13 +227,13 @@ Die durchgeführten Experimente zeigen differenzierte Ergebnisse über verschied
 
 \subsection{Erfolgsraten nach Aufgabentyp}
 
-Tabelle \ref{tab:benchmark-results} zeigt detaillierte Ergebnisse für ausgewählte Tasks:
+Tabelle \ref{tab:benchmark-results} zeigt detaillierte Ergebnisse für ausgewählte Szenarien:
 
 \begin{sloppypar}
 \begin{itemize}
-  \item \textbf{Refactoring:} \pct{73} Erfolgsrate (11/15 Tasks erfolgreich)
-  \item \textbf{Test-Fixing:} \pct{62} Erfolgsrate (5/8 Tasks erfolgreich)
-  \item \textbf{Lint-Resolution:} \pct{86} Erfolgsrate (6/7 Tasks erfolgreich)
+  \item \textbf{Refactoring:} \pct{73} Erfolgsrate (11/15 Szenarien erfolgreich)
+  \item \textbf{Testbehebung:} \pct{62} Erfolgsrate (5/8 Szenarien erfolgreich)
+  \item \textbf{Lint-Behebung:} \pct{86} Erfolgsrate (6/7 Szenarien erfolgreich)
 \end{itemize}
 \end{sloppypar}
 
@@ -251,7 +251,7 @@ Die entwickelte Lösung erreicht folgende Performance-Charakteristika:
   
   \item[Tool-Calls:] Durchschnittlich 4.2\,Werkzeugaufrufe pro Task. Reflexion reduzierte fehlerhafte Aufrufe um \pct{28}.
   
-  \item[Kosten:] Geschätzt \$\,0.08 pro Task bei GPT-4-Pricing (Jan 2024). Claude war \pct{35} günstiger bei vergleichbarer Qualität.
+  \item[Kosten:] Direkte Modellkosten in der Größenordnung von \$\,0.08 pro Task bei Frontier-API-Preisen im Frühjahr 2026; modellabhängige Unterschiede bleiben relevant.
 \end{description}
 \end{sloppypar}
 
@@ -265,7 +265,7 @@ Code-Qualität wurde über mehrere Dimensionen gemessen:
 \begin{itemize}
   \item \textbf{Test-Pass-Rate:} \pct{98} (nur 2 von 103 Tests regressierten nach Agent-Edits)
   \item \textbf{Lint-Score:} Durchschnittlich +12 Punkte Verbesserung nach Lint-Fixes
-  \item \textbf{Complexity:} Cyclomatic Complexity blieb unverändert oder verbesserte sich (Extract-Function Tasks)
+  \item \textbf{Komplexität:} Cyclomatic Complexity blieb unverändert oder verbesserte sich (Extract-Function-Szenarien)
   \item \textbf{Review-Akzeptanz:} Manuelles Review ergab \pct{81} Akzeptanzrate („would merge“)
   \item \textbf{Review-Akzeptanz:} Manuelles Review ergab \pct{81} Akzeptanzrate (\enquote{would merge})
 \end{itemize}
@@ -273,13 +273,13 @@ Code-Qualität wurde über mehrere Dimensionen gemessen:
 
 \subsection{Robustheit und Fehlerbehandlung}
 
-Error-Cases wurden systematisch getestet:
+Fehlerfälle wurden systematisch getestet:
 
 \begin{sloppypar}
 \begin{itemize}
   \item \textbf{Werkzeugfehler:} Agent erholte sich in \pct{67} der Fälle durch Wiederholung oder Alternativstrategie
   \item \textbf{Malformed Outputs:} JSON-Parsing-Fehler wurden durch Wiederholungen mit Schema-Validierung in \pct{89} behoben
-  \item \textbf{Timeouts:} Graceful Degradation bei max-steps Limit (definiert als \pct{15} Partial-Success)
+  \item \textbf{Timeouts:} Graceful Degradation bei Max-Steps-Limit (definiert als \pct{15} Teilerfolg)
 \end{itemize}
 \end{sloppypar}
 
@@ -293,7 +293,7 @@ Die entwickelte Lösung wurde mit Baselines verglichen:
 \label{tab:comparison}
 \begin{tabularx}{\textwidth}{Xcccc}
 \toprule
-\cellcolor{headercolor}\textcolor{white}{\textbf{Ansatz}} & \cellcolor{headercolor}\textcolor{white}{\textbf{Success}} & \cellcolor{headercolor}\textcolor{white}{\textbf{Token}} & \cellcolor{headercolor}\textcolor{white}{\textbf{Zeit (s)}} & \cellcolor{headercolor}\textcolor{white}{\textbf{Kosten}} \\
+\cellcolor{headercolor}\textcolor{white}{\textbf{Ansatz}} & \cellcolor{headercolor}\textcolor{white}{\textbf{Erfolg}} & \cellcolor{headercolor}\textcolor{white}{\textbf{Token}} & \cellcolor{headercolor}\textcolor{white}{\textbf{Zeit (s)}} & \cellcolor{headercolor}\textcolor{white}{\textbf{Kosten}} \\
 \midrule
 Naive Prompting & \pct{42} & 12.3\,k & 8.5 & \$\,0.12 \\
 \rowcolor{rowcolorgray}
@@ -309,14 +309,14 @@ Kernverbesserungen gegenüber Baselines:
 
 \begin{sloppypar}
 \begin{itemize}
-  \item \textbf{+31\% Erfolgsrate} vs. Naives Prompting durch strukturierte Werkzeugorchestrierung
-  \item \textbf{+15\% Erfolgsrate} vs. Standard-ReAct durch optimiertes Kontextmanagement
+  \item \textbf{+31\% Erfolgsrate} gegenüber naivem Prompting durch strukturierte Werkzeugorchestrierung
+  \item \textbf{+15\% Erfolgsrate} gegenüber Standard-ReAct durch optimiertes Kontextmanagement
   \item \textbf{-17\% Token-Kosten} durch intelligentes Pruning und Zusammenfassung
-  \item \textbf{Robustere Fehlerbehebung} durch Reflexions-Mechanismen
+  \item \textbf{Robustere Fehlerbehebung} durch Reflexionsmechanismen
 \end{itemize}
 \end{sloppypar}
 
-Die vorgestellten Ergebnisse werden im Folgenden kontextualisiert: Für Entwickler bedeutet eine um 31\% höhere Erfolgsrate gegenüber naivem Prompting konkret weniger manueller Nacharbeit, schnellere Durchlaufzeiten in Pull-Request-Zyklen und eine höhere Automatisierungsquote. Für Betreiber von CI/CD-Infrastrukturen bedeuten niedrigere Token-Kosten und reduzierte Fehlerraten geringere Betriebskosten. Die praktische Perspektive ist wichtig, um Entscheidungsträgern in Unternehmen handfeste Argumente für den Einsatz agentischer Lösungen zu liefern.
+Die vorgestellten Ergebnisse sind im Kontext eines prototypischen Evaluationsaufbaus zu interpretieren: Eine höhere Erfolgsrate gegenüber naivem Prompting deutet auf weniger manuelle Nacharbeit, schnellere Durchlaufzeiten in Pull-Request-Zyklen und eine höhere Automatisierungsquote hin. Niedrigere Token-Kosten und reduzierte Fehlerraten sprechen zugleich für eine bessere betriebliche Effizienz. Für die Übertragung in produktive Umgebungen bleibt jedoch entscheidend, unter welchen Randbedingungen diese Effekte stabil reproduziert werden können.
 
 \section{Validierung und Verifikation}
 
@@ -336,7 +336,7 @@ Alle kritischen Funktionen wurden durch automatisierte Tests validiert. Die Test
 
 End-to-End-Tests für alle 3 Benchmark-Szenarien. Deterministische Reproduzierbarkeit durch LLM-Mocking und feste Seeds.
 
-Praktische Erkenntnisse: Automatisierte Tests sollten sowohl synthetische als auch realistische Repositories umfassen; Mocking allein reicht nicht aus, da Tests in realen Umgebungen unerwartete Randfälle aufdecken. Darüber hinaus ist kontinuierliche Überwachung unabdingbar, um Drift in LLM-Verhalten oder Änderungen in abhängigen Tools frühzeitig zu erkennen.
+Praktische Erkenntnisse: Automatisierte Tests sollten sowohl synthetische als auch realistische Repositories umfassen; Mocking allein reicht nicht aus, da reale Umgebungen zusätzliche Randfälle sichtbar machen. Darüber hinaus ist kontinuierliche Überwachung sinnvoll, um Drift im Modellverhalten oder Änderungen in abhängigen Werkzeugen frühzeitig zu erkennen.
 
 \subsection{Sicherheits-Audits}
 
@@ -349,11 +349,11 @@ Praktische Erkenntnisse: Automatisierte Tests sollten sowohl synthetische als au
 % Benchmark-Ergebnisse mit longtable
 \begin{table}[ht]
 \centering
-\caption{Detaillierte Benchmark-Ergebnisse: Agentische SE-Tasks mit Evaluationsmetriken}
+\caption{Detaillierte Benchmark-Ergebnisse: Agentische SE-Szenarien mit Evaluationsmetriken}
 \label{tab:benchmark-results}
 \begin{tabularx}{\textwidth}{Xccccc}
 \toprule
-\cellcolor{headercolor}\textcolor{white}{\textbf{Aufgabe}} & \cellcolor{headercolor}\textcolor{white}{\textbf{Success}} & \cellcolor{headercolor}\textcolor{white}{\textbf{Token}} & \cellcolor{headercolor}\textcolor{white}{\textbf{Zeit (s)}} & \cellcolor{headercolor}\textcolor{white}{\textbf{Tools}} & \cellcolor{headercolor}\textcolor{white}{\textbf{Kosten}} \\
+\cellcolor{headercolor}\textcolor{white}{\textbf{Aufgabe}} & \cellcolor{headercolor}\textcolor{white}{\textbf{Erfolg}} & \cellcolor{headercolor}\textcolor{white}{\textbf{Token}} & \cellcolor{headercolor}\textcolor{white}{\textbf{Zeit (s)}} & \cellcolor{headercolor}\textcolor{white}{\textbf{Werkzeuge}} & \cellcolor{headercolor}\textcolor{white}{\textbf{Kosten}} \\
 \midrule
 Extract Function & OK & 7.2\,k & 18.5 & 4 & \$\,0.07 \\
 \rowcolor{rowcolorgray}
@@ -386,7 +386,7 @@ Tabelle~\ref{tab:eval-metrics} fasst die verwendeten Evaluationsmetriken zusamme
 \toprule
 \cellcolor{headercolor}\textcolor{white}{\textbf{Kategorie}} & \cellcolor{headercolor}\textcolor{white}{\textbf{Metriken / Beschreibung}} \\
 \midrule
-Qualität & Task-Success-Rate, Patch-Korrektheit (Tests/Lint), Review-Akzeptanz, Regressionen (\#) \\
+Qualität & Aufgabenerfolgsrate, Patch-Korrektheit (Tests/Lint), Review-Akzeptanz, Regressionen (\#) \\
 \rowcolor{rowcolorgray}
 Kosten & Token-/API-Kosten (EUR), Werkzeugaufrufkosten, Rechenzeit \\
 Latenz & End-to-End-Laufzeit (s), Tool-Roundtrips (\#), Wartezeit auf CI \\
